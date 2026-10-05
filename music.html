@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!--
+  music.html - The Music page
+  A simple page with one song the user can play. It gives people a calm break
+  from the other activities. It needs no JavaScript because the browser's
+  built-in audio player already has play, pause and volume buttons.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music | Play2gether</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Same header as every other page (see index.html for full comments).
+       aria-current="page" is on the "Music" link here. -->
+  <header>
+    <a class="brand" href="index.html">Play<span>2gether</span></a>
+    <nav aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="tictactoe.html">Play</a>
+      <a href="music.html" aria-current="page">Music</a>
+      <a href="moneybox.html">MoneyBox</a>
+    </nav>
+    <div class="language-control">
+      <label for="language">Language</label>
+      <select id="language" aria-describedby="language-help">
+        <option value="en">English</option>
+      </select>
+      <span id="language-help" class="screen-reader-only">This beginner version is available in English.</span>
+    </div>
+  </header>
+  <main>
+    <h1>Take a music break</h1>
+    <!-- One card for the song. If I add more songs later, each can be its own <article>. -->
+    <article>
+      <!-- The song title. -->
+      <h2>Rock your ABC's</h2>
+      <!-- Tells users how to use the player. -->
+      <p>Press play to listen. Use the player to pause or change the volume.</p>
+      <!-- The audio player.
+           "controls" shows the browser's own player (play/pause, timeline, volume). These are
+           already keyboard and screen-reader friendly, so I didn't need to build my own.
+           There is no "autoplay", so music never starts by surprise.
+           preload="metadata" only loads the song's length, not the whole file, until the user presses play. -->
+      <audio controls preload="metadata">
+        <!-- The song file. type="audio/mpeg" tells the browser it is an MP3 so it knows if it can play it. -->
+        <source src="sounds/abc-song.mp3" type="audio/mpeg">
+        <!-- This text only shows in very old browsers that cannot play audio. -->
+        Your browser does not support audio playback.
+      </audio>
+      <!-- Credit for the music. The song comes from Pixabay, and it is right (and good practice)
+           to say who made it. -->
+      <p>Music by Brad Priore, from Pixabay.</p>
+    </article>
+  </main>
+  <footer>Play, relax, and grow.</footer>
+</body>
+</html>

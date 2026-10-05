@@ -1,0 +1,268 @@
+/*
+  style.css - One stylesheet shared by every page
+  Using a single file means all pages look the same, and if I change a colour
+  here it changes everywhere. It is split into 4 parts:
+    1. Shared page styles (body, header, navigation, cards)
+    2. Forms and buttons
+    3. Activity layouts (grids, game board, totals)
+    4. Responsive styles for smaller screens
+*/
+
+/* 1. Shared page styles */
+
+/* The * selector means "every element". border-box makes width include padding and border,
+   so boxes are the size I set and don't get wider than expected. */
+* {
+  box-sizing: border-box;
+}
+/* Base settings for the whole page. Everything inherits the font and colour from here.
+   line-height 1.5 adds space between lines so text is easier to read.
+   The dark blue text on a very light background has strong contrast, which helps readability. */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  color: #23324b;
+  background: #f5f7fc;
+}
+/* Limits the content width to 950px and centres it (margin: auto), so lines of text
+   don't stretch too wide on big screens. */
+main, footer {
+  max-width: 950px;
+  margin: auto;
+  padding: 20px;
+}
+/* The header has three parts: brand, links, and language control. */
+/* Flexbox puts the three parts in one row. space-between pushes the brand to the left,
+   the language picker to the right, and the links in the middle. */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 13px 5%;
+  background: white;
+  border-bottom: 1px solid #e1e6f0;
+  min-height: 80px;
+}
+/* Default link colour, used across the site so links all look the same. */
+a {
+  color: #315bbd;
+}
+/* The "Play2gether" logo: big and bold with no underline so it looks like a logo, not a link.
+   nowrap stops the name breaking onto two lines. */
+.brand {
+  color: #23324b;
+  font-size: 28px;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+}
+/* Makes "2gether" blue, to match the site's main colour. */
+.brand span {
+  color: #2f5bd0;
+}
+/* Puts the nav links in a row. flex-wrap lets them move onto a new line if there isn't room. */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+/* Nav links look like buttons: padding makes them big enough to tap easily on a phone. */
+nav a {
+  padding: 10px 15px;
+  color: #53617a;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 8px;
+}
+/* Highlights a link when the mouse is over it, AND the link for the page you are on
+   (using the aria-current attribute from the HTML), so users always know where they are. */
+nav a:hover,
+nav a[aria-current="page"] {
+  color: #2055df;
+  background: #e9efff;
+}
+/* Puts the "Language" label and dropdown side by side. */
+.language-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* margin: 0 removes the gap that normal labels get further down (in part 2). */
+.language-control label {
+  margin: 0;
+  color: #14213a;
+  font-size: 14px;
+  font-weight: bold;
+}
+/* A fixed width so the dropdown doesn't stretch to 100% like other selects in part 2.
+   min-height 46px keeps it easy to tap. */
+.language-control select {
+  width: 110px;
+  margin: 0;
+  padding: 10px 12px;
+  min-height: 46px;
+  color: #23324b;
+  background: white;
+  border: 1px solid #b9c4d6;
+  border-radius: 8px;
+}
+/* Hides text visually but keeps it readable by screen readers.
+   I didn't use display: none because screen readers skip that completely. */
+.screen-reader-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+/* Every <article> is a white "card" with a border and rounded corners,
+   which groups related content and makes the layout clear. */
+article {
+  background: white;
+  padding: 20px;
+  border: 1px solid #cbd4e5;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+/* Removes the browser's default space above headings, so they line up with the top of the cards. */
+h1, h2 {
+  margin-top: 0;
+}
+footer {
+  text-align: center;
+}
+/* 2. Forms and buttons */
+/* display: block puts each label on its own line above its input. */
+label {
+  display: block;
+  margin-top: 12px;
+}
+/* font: inherit makes form controls use the page font (browsers normally use a different one).
+   Padding makes them bigger and easier to click or tap. */
+input, select, button {
+  font: inherit;
+  padding: 10px;
+  border: 1px solid #8190a8;
+  border-radius: 6px;
+}
+/* Inputs and dropdowns fill the width of their card so forms look neat. */
+input, select {
+  width: 100%;
+  margin: 6px 0 12px;
+}
+/* Buttons are blue with white text so they stand out as things to click.
+   cursor: pointer shows the hand icon. */
+button {
+  background: #315bbd;
+  color: white;
+  cursor: pointer;
+}
+/* A darker blue on hover, so the user can see the button reacts. */
+button:hover {
+  background: #244797;
+}
+/* Disabled buttons look faded and don't show the hand cursor, so users can tell they can't be clicked. */
+button:disabled {
+  cursor: default;
+  opacity: 0.65;
+}
+/* A thick gold outline around whatever is focused with the keyboard (Tab key).
+   :focus-visible only shows it for keyboard users, not on every mouse click.
+   This is important so keyboard users can see where they are on the page. */
+:focus-visible {
+  outline: 3px solid #a77500;
+  outline-offset: 3px;
+}
+/* Stops the checkbox stretching to 100% width like the other inputs above. */
+.checkbox input {
+  width: auto;
+}
+/* 3. Activity layouts */
+/* CSS Grid for laying out cards. gap adds space between them. */
+.cards, .game {
+  display: grid;
+  gap: 20px;
+}
+/* Three equal columns (1fr = one equal share of the space) for the home page and MoneyBox totals. */
+.cards {
+  grid-template-columns: repeat(3, 1fr);
+}
+/* Two equal columns for the Tic Tac Toe and MoneyBox pages. */
+.game {
+  grid-template-columns: repeat(2, 1fr);
+}
+/* The Tic Tac Toe board: a 3x3 grid. max-width stops it getting too big on wide screens. */
+#board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  max-width: 330px;
+  margin: 20px 0;
+}
+/* aspect-ratio: 1 keeps each square a perfect square at any screen size.
+   The large font makes the X and O easy to see. */
+.square {
+  aspect-ratio: 1;
+  padding: 0;
+  font-size: 36px;
+}
+/* Big bold numbers for the MoneyBox totals, because they are the most important information. */
+.total {
+  font-size: 28px;
+  font-weight: bold;
+}
+/* The audio player and progress bar fill the width of their card. */
+audio, progress {
+  width: 100%;
+  margin: 15px 0;
+}
+#history {
+  padding-left: 20px;
+}
+/* overflow-wrap: anywhere breaks very long words in a description,
+   so they don't spill outside the card on small screens. */
+#history li {
+  margin: 12px 0;
+  overflow-wrap: anywhere;
+}
+/* Space between the entry text and its Delete button. */
+#history button {
+  margin-left: 12px;
+}
+/* 4. Put columns underneath each other on small screens. */
+/* On screens 650px wide or less (most phones), every grid becomes one column,
+   because side-by-side cards would be too narrow to read. */
+@media (max-width: 650px) {
+  .cards, .game {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Keep the navigation easy to use on phones. */
+/* On screens 800px or less, the header wraps. order: 3 moves the nav to its own full-width
+   row underneath the brand and language picker, centred, so the links aren't squashed. */
+@media (max-width: 800px) {
+  header {
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 16px;
+  }
+  header nav {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+}
+/* On very small phones (400px or less), centre the header and make the link padding
+   a bit smaller so all four links still fit. */
+@media (max-width: 400px) {
+  header {
+    justify-content: center;
+  }
+  nav a {
+    padding: 10px 12px;
+  }
+}

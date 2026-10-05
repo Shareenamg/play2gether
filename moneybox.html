@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!--
+  moneybox.html - The MoneyBox page
+  A simple pocket money tracker. The user adds money they receive ("money in")
+  or spend ("money out"), sets a savings goal, and sees their balance and
+  progress. This file builds the layout; the calculations and saving are
+  done in moneybox.js.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoneyBox | Play2gether</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- "defer" runs moneybox.js only after the page is built, so the script can find every element. -->
+  <script src="moneybox.js" defer></script>
+</head>
+<body>
+  <!-- Same header as every other page (see index.html for full comments).
+       aria-current="page" is on the "MoneyBox" link here. -->
+  <header>
+    <a class="brand" href="index.html">Play<span>2gether</span></a>
+    <nav aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="tictactoe.html">Play</a>
+      <a href="music.html">Music</a>
+      <a href="moneybox.html" aria-current="page">MoneyBox</a>
+    </nav>
+    <div class="language-control">
+      <label for="language">Language</label>
+      <select id="language" aria-describedby="language-help">
+        <option value="en">English</option>
+      </select>
+      <span id="language-help" class="screen-reader-only">This beginner version is available in English.</span>
+    </div>
+  </header>
+  <main>
+    <h1>My MoneyBox</h1>
+    <!-- Says which currency is used so nobody is confused about the amounts. -->
+    <p>Add money you receive or spend. Amounts are in euros.</p>
+    <!-- TOTALS: three cards showing the most important numbers at the top, where they are seen first.
+         They start at €0.00 and the JavaScript updates them using their ids. -->
+    <section class="cards" aria-label="Money totals">
+      <article><h2>Balance</h2><p id="balance" class="total">€0.00</p></article>
+      <article><h2>Money in</h2><p id="money-in" class="total">€0.00</p></article>
+      <article><h2>Money out</h2><p id="money-out" class="total">€0.00</p></article>
+    </section>
+    <!-- Two cards side by side: adding an entry (left) and the savings goal (right).
+         I reused the "game" class from the Tic Tac Toe page because it already makes a two-column layout. -->
+    <section class="game">
+      <!-- ADD AN ENTRY -->
+      <article>
+        <h2>Add an entry</h2>
+        <form id="money-form">
+          <!-- A dropdown so the user can only pick "in" or "out", which avoids typing mistakes. -->
+          <label for="type">What happened?</label>
+          <select id="type">
+            <option value="in">Money in</option>
+            <option value="out">Money out</option>
+          </select>
+          <!-- type="number" shows a number keyboard on phones.
+               min="0.01" stops zero or negative amounts, max stops silly huge numbers,
+               and step="0.01" allows cents (two decimal places). -->
+          <label for="amount">Amount (€)</label>
+          <input id="amount" type="number" min="0.01" max="1000000" step="0.01" required>
+          <!-- A short description so the user remembers what each entry was for.
+               The placeholder gives examples; maxlength keeps it short enough to fit in the history list. -->
+          <label for="note">Description</label>
+          <input id="note" maxlength="80" placeholder="Pocket money, snacks, ..." required>
+          <button type="submit">Add entry</button>
+        </form>
+        <!-- Feedback messages ("Entry added.", errors). aria-live="polite" makes screen readers read them out. -->
+        <p id="message" role="status" aria-live="polite"></p>
+      </article>
+      <!-- SAVINGS GOAL -->
+      <article>
+        <h2>Savings goal</h2>
+        <!-- The user names what they are saving for and how much it costs. -->
+        <form id="goal-form">
+          <label for="goal-name">What are you saving for?</label>
+          <input id="goal-name" maxlength="60" required>
+          <label for="goal-amount">Target (€)</label>
+          <input id="goal-amount" type="number" min="0.01" max="1000000" step="0.01" required>
+          <button type="submit">Set goal</button>
+        </form>
+        <!-- Shows the goal in words, e.g. "Bike: €20.00 of €100.00". -->
+        <p id="goal-text" role="status">Set a goal to get started.</p>
+        <!-- A progress bar showing how close the user is to the goal (0 to 100%).
+             It has no visible label, so aria-label tells screen readers what it measures. -->
+        <progress id="progress" value="0" max="100" aria-label="Savings goal progress"></progress>
+      </article>
+    </section>
+    <!-- HISTORY: a list of every entry, so the user can see where their money went and delete mistakes. -->
+    <article>
+      <h2>History</h2>
+      <!-- Shown when there are no entries. The JavaScript hides it once something is added. -->
+      <p id="empty">No entries yet.</p>
+      <!-- Empty list. The JavaScript creates one <li> per entry inside it. -->
+      <ul id="history"></ul>
+    </article>
+    <!-- Tells the user their data is saved in this browser only (not online), or if saving failed. -->
+    <p id="storage-message" role="status">Entries are saved in this browser.</p>
+    <!-- Only shown if JavaScript is turned off, because MoneyBox cannot work without it. -->
+    <noscript>Turn on JavaScript to use MoneyBox.</noscript>
+  </main>
+  <footer>Play, relax, and grow.</footer>
+</body>
+</html>

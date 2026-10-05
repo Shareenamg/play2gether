@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--
+  index.html - Home page of Play2gether
+  This is the first page people see. It welcomes the user and links to the
+  three activities on the site: Tic Tac Toe, Music and MoneyBox.
+
+  <!DOCTYPE html> (the line above) must come first. It tells the browser this is
+  a modern HTML5 page, so it uses standard rules to display it.
+-->
+<!-- lang="en" tells browsers and screen readers the page is in English, so the words are read out with the right pronunciation. -->
+<html lang="en">
+
+<head>
+  <!-- UTF-8 lets the page show any character correctly, including the € sign and emojis. -->
+  <meta charset="UTF-8">
+  <!-- Makes the page fit the width of the device, so it works properly on phones and isn't zoomed out. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- The text shown on the browser tab. I put the page name first so it's easy to tell tabs apart. -->
+  <title>Home | Play2gether</title>
+  <!-- Links to my one shared stylesheet. Every page uses the same file so the whole site looks consistent. -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- HEADER: the same on every page so users always know where they are and how to move around. -->
+  <header>
+    <!-- The logo/brand name. It links back to the home page, which is what most users expect a logo to do.
+         The <span> lets me colour "2gether" differently in the CSS. -->
+    <a class="brand" href="index.html">Play<span>2gether</span></a>
+    <!-- Main navigation. The aria-label names this menu for screen reader users. -->
+    <nav aria-label="Main navigation">
+      <!-- aria-current="page" marks the page we are on. Screen readers announce it,
+           and my CSS uses it to highlight the current link. -->
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="tictactoe.html">Play</a>
+      <a href="music.html">Music</a>
+      <a href="moneybox.html">MoneyBox</a>
+    </nav>
+    <!-- Language picker. Right now there is only English, but I added it so more languages
+         can be added later without changing the layout. -->
+    <div class="language-control">
+      <!-- The "for" attribute connects the label to the select, so clicking the label focuses the dropdown. -->
+      <label for="language">Language</label>
+      <!-- aria-describedby links the dropdown to the hidden help text below, which screen readers read out. -->
+      <select id="language" aria-describedby="language-help">
+        <option value="en">English</option>
+      </select>
+      <!-- Hidden on screen but read by screen readers, explaining why there is only one language. -->
+      <span id="language-help" class="screen-reader-only">This is the first Version so only English is available.</span>
+    </div>
+  </header>
+  <!-- MAIN: the unique content of this page. Using <main> helps screen reader users skip straight to it. -->
+  <main>
+    <!-- Only one <h1> per page: it is the main title. -->
+    <h1>Welcome to Play2gether</h1>
+    <p>Choose something you enjoy.</p>
+    <!-- A section holding three "cards", one for each activity. The CSS puts them side by side in a grid. -->
+    <section class="cards" aria-label="Activities">
+      <!-- Each <article> is one self-contained card with a heading, short description and a link. -->
+      <article>
+        <h2>🎮 Play</h2>
+        <p>Play Tic Tac Toe with a friend.</p>
+        <!-- The link text says exactly where it goes, rather than just "click here", which is better for accessibility. -->
+        <a href="tictactoe.html">Start a game →</a>
+      </article>
+      <article>
+        <h2>🎵 Music</h2>
+        <p>Listen, sing, or take a break.</p>
+        <a href="music.html">Listen to music →</a>
+      </article>
+      <article>
+        <h2>🪙 MoneyBox</h2>
+        <p>Track your pocket money and savings.</p>
+        <a href="moneybox.html">Open MoneyBox →</a>
+      </article>
+    </section>
+  </main>
+  <!-- FOOTER: the site's slogan, shown at the bottom of every page. -->
+  <footer>Play, relax, and grow.</footer>
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<!--
+  tictactoe.html - The Tic Tac Toe game page
+  Two players type their names, then take turns clicking squares on a 3x3 board.
+  This file only builds the structure of the page. All the game logic
+  (whose turn it is, checking for a winner, sounds) is in tictactoe.js.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic Tac Toe | Play2gether</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Loads the game code. "defer" makes the browser wait until the whole page is built before
+       running the script, so document.getElementById() can find all the elements. -->
+  <script src="tictactoe.js" defer></script>
+</head>
+<body>
+  <!-- Same header as every other page (see index.html for full comments).
+       aria-current="page" is on the "Play" link here because this is the Play page. -->
+  <header>
+    <a class="brand" href="index.html">Play<span>2gether</span></a>
+    <nav aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="tictactoe.html" aria-current="page">Play</a>
+      <a href="music.html">Music</a>
+      <a href="moneybox.html">MoneyBox</a>
+    </nav>
+    <div class="language-control">
+      <label for="language">Language</label>
+      <select id="language" aria-describedby="language-help">
+        <option value="en">English</option>
+      </select>
+      <span id="language-help" class="screen-reader-only">This beginner version is available in English.</span>
+    </div>
+  </header>
+  <main>
+    <h1>Tic Tac Toe</h1>
+    <!-- Short instructions so new players know the rules straight away. -->
+    <p>Take turns. Get three Xs or Os in a row to win.</p>
+    <!-- The "game" class puts the two articles side by side (players on the left, board on the right). -->
+    <section class="game">
+      <!-- LEFT CARD: player names and sound setting. -->
+      <article>
+        <h2>Players</h2>
+        <!-- A form for the two names. I used a form so pressing Enter also starts the game.
+             "required" stops the form being sent if a box is empty, and maxlength="20"
+             stops very long names breaking the layout. -->
+        <form id="player-form">
+          <label for="player-x">Player X</label>
+          <input id="player-x" maxlength="20" required>
+          <label for="player-o">Player O</label>
+          <input id="player-o" maxlength="20" required>
+          <button type="submit">Start game</button>
+        </form>
+        <!-- Empty paragraph where the JavaScript writes error messages (e.g. "Enter both names.").
+             role="status" makes screen readers announce the message when it appears. -->
+        <p id="player-message" role="status"></p>
+        <!-- Sounds are OFF by default (box unchecked) so the page doesn't suddenly make noise.
+             The input is inside the label, so clicking the words also ticks the box. -->
+        <label class="checkbox"><input id="sound" type="checkbox"> Play game sounds</label>
+        <!-- Shows a message if a sound file fails to play. -->
+        <p id="sound-message" role="status"></p>
+      </article>
+      <!-- RIGHT CARD: the game itself. -->
+      <article>
+        <!-- Shows whose turn it is, or who won. aria-live="polite" means screen readers read out
+             each change, but wait until they finish what they are currently saying. -->
+        <h2 id="status" role="status" aria-live="polite">Enter your names to start.</h2>
+        <!-- The board: 9 squares. role="group" and aria-label tell screen readers these buttons belong together. -->
+        <div id="board" role="group" aria-label="Game board">
+        <!-- I used <button> for each square (not a <div>) because buttons can be reached with the
+             Tab key and pressed with Enter/Space, so the game works with a keyboard.
+             type="button" stops them acting like submit buttons.
+             Each aria-label says the square number and what is in it, because an empty button
+             has no text for a screen reader to read.
+             They all start "disabled" so nobody can play before entering names. -->
+        <button class="square" type="button" aria-label="Square 1, empty" disabled></button>
+        <button class="square" type="button" aria-label="Square 2, empty" disabled></button>
+        <button class="square" type="button" aria-label="Square 3, empty" disabled></button>
+        <button class="square" type="button" aria-label="Square 4, empty" disabled></button>
+        <button class="square" type="button" aria-label="Square 5, empty" disabled></button>
+        <button class="square" type="button" aria-label="Square 6, empty" disabled></button>
+        <button class="square" type="button" aria-label="Square 7, empty" disabled></button>
+        <button class="square" type="button" aria-label="Square 8, empty" disabled></button>
+        <button class="square" type="button" aria-label="Square 9, empty" disabled></button>
+        </div>
+        <!-- "Play again" clears the board but keeps the same names.
+             "Change players" goes back to the name form.
+             Both are disabled until a game has started, because they make no sense before then. -->
+        <button id="restart" type="button" disabled>Play again</button>
+        <button id="change-players" type="button" disabled>Change players</button>
+      </article>
+    </section>
+    <!-- Sound effects. They have no "controls", so they are invisible; the JavaScript plays them by id.
+         preload="none" means the browser only downloads a sound when it is needed, which saves data
+         for people who leave sounds switched off. -->
+    <audio id="x-sound" src="sounds/x.mp3" preload="none"></audio>
+    <audio id="o-sound" src="sounds/o.mp3" preload="none"></audio>
+    <audio id="win-sound" src="sounds/win.mp3" preload="none"></audio>
+    <audio id="draw-sound" src="sounds/draw.mp3" preload="none"></audio>
+  </main>
+  <footer>Play, relax, and grow.</footer>
+</body>
+</html>
