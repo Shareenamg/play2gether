@@ -1,3 +1,4 @@
+export {};
 /*
   moneybox.js - The logic for the MoneyBox page
   This file:
@@ -14,17 +15,22 @@
 
 // ---- 1. Elements and data ----
 // Elements I use often, stored once at the start.
-const moneyForm = document.getElementById('money-form');
-const goalForm = document.getElementById('goal-form');
-const message = document.getElementById('message');
-const historyList = document.getElementById('history');
-const storageMessage = document.getElementById('storage-message');
+const moneyForm = document.getElementById('money-form') as HTMLFormElement;
+const goalForm = document.getElementById('goal-form') as HTMLFormElement;
+const message = document.getElementById('message') as HTMLParagraphElement;
+const historyList = document.getElementById('history') as HTMLUListElement;
+const storageMessage = document.getElementById('storage-message') as HTMLParagraphElement;
 
 // The name the data is saved under in localStorage. "v1" (version 1) means that if I change
 // how the data is stored in the future, I can use a new name and old data won't break the page.
 const storageKey = 'play2gether-beginner-v1';
 // The list of entries. Each one is an object like: { type: 'in', cents: 500, note: 'Pocket money' }
-let entries = [];
+interface MoneyEntry {
+  type: string;
+  cents: number;
+  note: string;
+}
+let entries: MoneyEntry[] = [];
 // The savings goal. goalCents is 0 when no goal has been set.
 let goalName = '';
 let goalCents = 0;
@@ -34,7 +40,7 @@ let goalCents = 0;
 
 // Turns cents into a euro string for showing on the page, e.g. 250 -> "€2.50".
 // toFixed(2) always shows two decimal places, so €2.5 becomes €2.50.
-function money(cents) {
+function money(cents: number) {
   return '€' + (cents / 100).toFixed(2);
 }
 
@@ -104,8 +110,8 @@ function loadData() {
     goalName = data.goalName;
     goalCents = data.goalCents;
     // Fill the goal form with the saved goal so the user can see and edit it.
-    document.getElementById('goal-name').value = goalName;
-    if (goalCents > 0) document.getElementById('goal-amount').value = goalCents / 100;
+    (document.getElementById('goal-name') as HTMLInputElement).value = goalName;
+    if (goalCents > 0)(document.getElementById('goal-amount') as HTMLInputElement).value = String(goalCents / 100);
   } catch (error) {
     // Any problem (broken JSON, invalid data, storage blocked): start with an empty tracker
     // and tell the user, instead of crashing.
@@ -151,22 +157,22 @@ function updatePage() {
   }
   // Show the three totals at the top of the page.
   const balance = incoming - outgoing;
-  document.getElementById('balance').textContent = money(balance);
-  document.getElementById('money-in').textContent = money(incoming);
-  document.getElementById('money-out').textContent = money(outgoing);
+  document.getElementById('balance')!.textContent = money(balance);
+  document.getElementById('money-in')!.textContent = money(incoming);
+  document.getElementById('money-out')!.textContent = money(outgoing);
   // Hide "No entries yet." when there is at least one entry.
-  document.getElementById('empty').hidden = entries.length > 0;
+  document.getElementById('empty')!.hidden = entries.length > 0;
   // Only update the goal if one has been set (also avoids dividing by zero).
   if (goalCents > 0) {
-    document.getElementById('goal-text').textContent =
+    document.getElementById('goal-text')!.textContent =
       goalName + ': ' + money(balance) + ' of ' + money(goalCents);
     // Percentage of the goal reached. Math.min caps it at 100 so the bar never goes over full.
-    document.getElementById('progress').value = Math.min(100, balance / goalCents * 100);
+    (document.getElementById('progress') as HTMLProgressElement).value = Math.min(100, balance / goalCents * 100);
   }
 }
 
 // Deletes one entry after checking it is allowed.
-function deleteEntry(index) {
+function deleteEntry(index: number) {
   // Deleting money that came IN lowers the balance. If that would make the balance negative
   // (because some of that money was already spent), I block it and explain why.
   if (entries[index].type === 'in' && entries[index].cents > getBalance()) {
@@ -181,7 +187,7 @@ function deleteEntry(index) {
   updatePage();
   message.textContent = 'Entry deleted.';
   // The Delete button that was clicked no longer exists, so move focus somewhere useful.
-  document.getElementById('amount').focus();
+  document.getElementById('amount')!.focus();
 }
 
 
@@ -191,12 +197,12 @@ function deleteEntry(index) {
 moneyForm.addEventListener('submit', function (event) {
   // Stop the page reloading so the data isn't lost.
   event.preventDefault();
-  const type = document.getElementById('type').value;
+  const type = (document.getElementById('type') as HTMLSelectElement).value;
   // Input values are always text, so Number() turns the amount into a number.
-  const amount = Number(document.getElementById('amount').value);
+  const amount = Number((document.getElementById('amount') as HTMLInputElement).value);
   // Change euros to whole cents. Math.round fixes tiny decimal errors (e.g. 2.5 * 100).
   const cents = Math.round(amount * 100);
-  const note = document.getElementById('note').value.trim();
+  const note = (document.getElementById('note') as HTMLInputElement).value.trim();
   // Check the input again in JavaScript, because HTML rules (min, step, required) can be skipped.
   // The amount must be a real number, more than 0, at most €1,000,000, and have no more than
   // 2 decimal places (if amount*100 isn't almost exactly a whole number, there were too many decimals).
@@ -218,18 +224,18 @@ moneyForm.addEventListener('submit', function (event) {
   moneyForm.reset();
   message.textContent = 'Entry added.';
   // Put the cursor back in the amount box, ready for the next entry.
-  document.getElementById('amount').focus();
+  document.getElementById('amount')!.focus();
 });
 // When a savings goal is submitted...
 goalForm.addEventListener('submit', function (event) {
   event.preventDefault();
-  const name = document.getElementById('goal-name').value.trim();
-  const amount = Number(document.getElementById('goal-amount').value);
+  const name = (document.getElementById('goal-name') as HTMLInputElement).value.trim();
+  const amount = Number((document.getElementById('goal-amount') as HTMLInputElement).value);
   const cents = Math.round(amount * 100);
   // Same checks as for entries: a name, and a valid positive amount with up to two decimals.
   if (!name || !Number.isFinite(amount) || cents <= 0 || cents > 100000000 ||
       Math.abs(amount * 100 - cents) > 0.00001) {
-    document.getElementById('goal-text').textContent = 'Enter a name and a positive target with up to two decimal places.';
+    document.getElementById('goal-text')!.textContent = 'Enter a name and a positive target with up to two decimal places.';
     return;
   }
   // Save the new goal and update the progress bar.

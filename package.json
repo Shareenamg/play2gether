@@ -1,0 +1,25 @@
+{
+  "name": "play2gether",
+  "version": "1.0.0",
+  "description": "Play2gether is a small website I built with HTML, CSS and JavaScript. It gives people three simple activities in one place: a two-player **Tic Tac Toe** game, a **Music** break page, and a **MoneyBox** pocket money tracker.",
+  "main": "moneybox.js",
+ "scripts": {
+  "build": "tsc",
+  "watch": "tsc --watch"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shareenamg/play2gether.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Shareenamg/play2gether/issues"
+  },
+  "homepage": "https://github.com/Shareenamg/play2gether#readme",
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}

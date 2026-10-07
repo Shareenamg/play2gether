@@ -1,3 +1,4 @@
+export {};
 /*
   tictactoe.js - The game logic for Tic Tac Toe
   This file:
@@ -10,12 +11,12 @@
 // ---- 1. Get the elements from the page ----
 // I store these in constants at the start so I don't have to search the page every time I need them.
 // querySelectorAll gives a list of all 9 square buttons, in the same order as in the HTML (0 to 8).
-const squares = document.querySelectorAll('.square');
-const playerForm = document.getElementById('player-form');
-const statusText = document.getElementById('status');
-const restartButton = document.getElementById('restart');
-const changeButton = document.getElementById('change-players');
-const soundCheckbox = document.getElementById('sound');
+const squares = document.querySelectorAll<HTMLButtonElement>('.square');
+const playerForm = document.getElementById('player-form') as HTMLFormElement;
+const statusText = document.getElementById('status') as HTMLInputElement;
+const restartButton = document.getElementById('restart') as HTMLButtonElement;
+const changeButton = document.getElementById('change-players') as HTMLButtonElement;
+const soundCheckbox = document.getElementById('sound') as HTMLInputElement;
 
 
 // ---- 2. Game state (variables that change while playing) ----
@@ -49,16 +50,16 @@ function playerName() {
 }
 
 // Plays one sound effect, using the id of an <audio> element.
-function playSound(id) {
+function playSound(id: string) {
   // If the sound box is not ticked, stop here and play nothing.
   if (!soundCheckbox.checked) return;
-  const audio = document.getElementById(id);
+  const audio = document.getElementById(id) as HTMLAudioElement;
   // Go back to the start, so the sound plays fully even if it was played a moment ago.
   audio.currentTime = 0;
   // play() can fail (e.g. the file is missing or the browser blocks it).
   // .catch() handles that error and shows a message instead of breaking the game.
   audio.play().catch(function () {
-    document.getElementById('sound-message').textContent = 'This sound could not play.';
+    document.getElementById('sound-message')!.textContent = 'This sound could not play.';
   });
 }
 
@@ -110,7 +111,7 @@ function hasWon() {
 }
 
 // Ends the game: shows the result message, locks the board and plays the right sound.
-function finishGame(message, sound) {
+function finishGame(message: string, sound:string) {
   playing = false;
   statusText.textContent = message;
   // Disable all squares so nobody can keep playing after the game is over.
@@ -121,7 +122,7 @@ function finishGame(message, sound) {
 }
 
 // Runs when a square is clicked. "index" is the square's position (0 to 8).
-function makeMove(index) {
+function makeMove(index: number) {
   // Ignore the click if the game isn't running or the square is already taken.
   if (!playing || board[index] !== '') return;
   // Save the move in the array AND show it on screen.
@@ -170,15 +171,15 @@ playerForm.addEventListener('submit', function (event) {
   // Stop the form reloading the page, which is what forms normally do.
   event.preventDefault(); 
   // .trim() removes spaces at the start and end, so a name of only spaces counts as empty.
-  playerX = document.getElementById('player-x').value.trim();
-  playerO = document.getElementById('player-o').value.trim();
+  playerX = (document.getElementById('player-x') as HTMLInputElement).value.trim();
+  playerO = (document.getElementById('player-o') as HTMLInputElement).value.trim();
   // Extra check in case a name was only spaces ("required" in the HTML doesn't catch that).
   if (!playerX || !playerO) {
-    document.getElementById('player-message').textContent = 'Enter both names.';
+    document.getElementById('player-message')!.textContent = 'Enter both names.';
     return;
   }
   // Names are fine: clear any old error, hide the form, turn on the game buttons and start.
-  document.getElementById('player-message').textContent = '';
+  document.getElementById('player-message')!.textContent = '';
   playerForm.hidden = true;
   restartButton.disabled = false;
   changeButton.disabled = false;
@@ -202,7 +203,7 @@ changeButton.addEventListener('click', function () {
   }
   statusText.textContent = 'Enter your names to start.';
   // Put the cursor in the first name box, ready to type.
-  document.getElementById('player-x').focus();
+  document.getElementById('player-x')!.focus();
 });
 // If the sound box is ticked or unticked, stop any sound that is playing right now.
 soundCheckbox.addEventListener('change', stopSounds);
