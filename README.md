@@ -10,14 +10,29 @@ The site's slogan is *"Play, relax, and grow."*
 
 ---
 
+## TypeScript version (this branch)
+
+On the `version-typescript` branch, the logic for Tic Tac Toe and MoneyBox is written in **TypeScript** instead of JavaScript. The `.ts` files in `src/` are compiled into `.js` files in `dist/`, which the HTML pages load.
+
+📄 **[Read the full migration summary](TYPESCRIPT-MIGRATION.md)**: how the environment was set up, the 93 compiler errors found, and how each kind was fixed.
+
+---
+
 ## How to run it
 
-1. Download or copy the project folder so all the files are together (see the folder structure below).
-2. Open `index.html` in any modern web browser (Chrome, Firefox, Edge or Safari).
+1. Install [Node.js](https://nodejs.org/) (LTS version), which includes npm.
+2. In the project folder, install the dependencies (this creates `node_modules/`):
+   ```bash
+   npm install
+   ```
+3. Compile the TypeScript into JavaScript:
+   ```bash
+   npm run build
+   ```
+   While editing, use `npm run watch` instead: it recompiles automatically every time you save.
+4. Open `index.html` with a local server, for example **Live Server** in VS Code (right-click `index.html` → *Open with Live Server*).
 
-That's it. There is nothing to install, and it doesn't need a server or an internet connection.
-
-> **Note:** JavaScript must be turned on for Tic Tac Toe and MoneyBox to work.
+> **Note:** Opening `index.html` by double-clicking will not work for Tic Tac Toe and MoneyBox. The scripts are loaded as modules (`type="module"`), and browsers only run modules from a server.
 
 ---
 
@@ -25,13 +40,22 @@ That's it. There is nothing to install, and it doesn't need a server or an inter
 
 ```
 play2gether/
-├── index.html        Home page with links to the three activities
-├── tictactoe.html    Tic Tac Toe page (layout)
-├── tictactoe.js      Tic Tac Toe game logic
-├── music.html        Music break page
-├── moneybox.html     MoneyBox page (layout)
-├── moneybox.js       MoneyBox logic (totals, goal, saving)
-├── style.css         One stylesheet shared by every page
+├── index.html               Home page with links to the three activities
+├── tictactoe.html           Tic Tac Toe page (layout)
+├── music.html               Music break page
+├── moneybox.html            MoneyBox page (layout)
+├── style.css                One stylesheet shared by every page
+├── src/                     TypeScript source (the files I edit)
+│   ├── tictactoe.ts         Tic Tac Toe game logic
+│   └── moneybox.ts          MoneyBox logic (totals, goal, saving)
+├── dist/                    Compiled JavaScript (made by npm run build, never edited by hand)
+│   ├── tictactoe.js
+│   └── moneybox.js
+├── package.json             Project info, npm scripts and dependencies
+├── package-lock.json        Exact versions of the installed dependencies
+├── tsconfig.json            TypeScript settings (src → dist, strict mode)
+├── .gitignore               Keeps node_modules/ out of Git
+├── TYPESCRIPT-MIGRATION.md  Summary of the JavaScript → TypeScript migration
 └── sounds/
     ├── x.mp3         Sound when X makes a move
     ├── o.mp3         Sound when O makes a move
@@ -49,7 +73,7 @@ I kept the structure (HTML), the look (CSS) and the behaviour (JavaScript) in se
 ### 🏠 Home (`index.html`)
 Welcomes the user and shows three cards, one for each activity, with a link to each.
 
-### 🎮 Tic Tac Toe (`tictactoe.html` + `tictactoe.js`)
+### 🎮 Tic Tac Toe (`tictactoe.html` + `src/tictactoe.ts`)
 - Two players enter their names, then take turns placing X and O on a 3×3 board.
 - The game checks every move for three in a row (rows, columns and diagonals) or a draw.
 - The status message uses the players' real names, e.g. *"Sam's turn (O)"* or *"Alex wins!"*.
@@ -59,7 +83,7 @@ Welcomes the user and shows three cards, one for each activity, with a link to e
 ### 🎵 Music (`music.html`)
 A calm break page with one song, *Rock your ABC's*. It uses the browser's built-in audio player, so it needs no JavaScript. The music never plays automatically.
 
-### 🪙 MoneyBox (`moneybox.html` + `moneybox.js`)
+### 🪙 MoneyBox (`moneybox.html` + `src/moneybox.ts`)
 - Add money you receive (**Money in**) or spend (**Money out**) with a short description.
 - See your **Balance**, total **Money in** and total **Money out** at the top of the page.
 - Set a **savings goal** and watch a progress bar fill up.
@@ -119,10 +143,11 @@ The site works on phones, tablets and computers:
 
 - **HTML5** – page structure
 - **CSS3** – layout (Flexbox and Grid), styling and media queries
-- **JavaScript** – game logic, calculations, form checking and saving data
+- **TypeScript** – game logic, calculations, form checking and saving data (compiled to JavaScript)
+- **Node.js and npm** – installing TypeScript and running the build
 - **localStorage** – saving MoneyBox data in the browser
 
-No frameworks or libraries were used.
+No frameworks or libraries were used. TypeScript is only a development tool: the browser runs the compiled JavaScript.
 
 ---
 
